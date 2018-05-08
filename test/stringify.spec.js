@@ -51,4 +51,33 @@ describe('cssme: tests', function () {
     });
     expect(result).to.equal('body div{color:red;background:blue;}body p{font-style:italic;}');
   });
+
+  it('Double nested', async function () {
+    const result = cssme.stringify({
+      'body': {
+        'div': {
+          color: 'red',
+          'p': {
+            'font-style': 'italic'
+          }
+        }
+      }
+    });
+    expect(result).to.equal('body div{color:red;}body div p{font-style:italic;}');
+  });
+
+  it('Double nested surrounded', async function () {
+    const result = cssme.stringify({
+      'body': {
+        'div': {
+          color: 'red',
+          'p': {
+            'font-style': 'italic'
+          },
+          'background-color': 'black'
+        }
+      }
+    });
+    expect(result).to.equal('body div{color:red;background-color:black;}body div p{font-style:italic;}');
+  });
 });
