@@ -1,29 +1,42 @@
 'use strict';
 
 class CSSMe {
-  stringify(rules = {}, nestedSelectors = []) {
-    const output = {};
+  stringify(rules = {}) {
+    const output = [];
+    const stack = this.getEmptyStack(rules);
 
-    this.getCSS(rules, nestedSelectors, output);
+    let current, rule, value, selector;
+
+    while (stack.length > 0) {
+      current = stack.shift();
+
+      for (rule in current.rules) {
+        value = current.rules[rule];
+
+        if (this.isObject(value)) {
+          stack.push({
+            rules: value,
+            nestedSelectors: current.nestedSelectors.concat(rule)
+          });
+        } else {
+          selector = this.getSelector(current.nestedSelectors);
+          output[selector] = output[selector] || [];
+          output[selector].push({
+            property: rule,
+            value: value
+          });
+        }
+      }
+    }
 
     return this.formatOutput(output);
   }
 
-  getCSS(rules = {}, nestedSelectors = [], output = {}) {
-    let rule, value;
-
-    for (rule in rules) {
-      value = rules[rule];
-
-      if (this.isObject(value)) {
-        this.getCSS(value, nestedSelectors.concat(rule), output);
-      } else {
-        this.setValue(output, nestedSelectors, {
-          property: rule,
-          value: value
-        });
-      }
-    }
+  getEmptyStack(rules) {
+    return [{
+      rules: rules,
+      nestedSelectors: []
+    }];
   }
 
   formatOutput(output) {
@@ -51,16 +64,6 @@ class CSSMe {
     });
 
     output.push('}');
-  }
-
-  setValue(output, nestedSelectors, value) {
-    const selector = this.getSelector(nestedSelectors);
-
-    if (!output[selector]) {
-      output[selector] = [];
-    }
-
-    output[selector].push(value);
   }
 
   getSelector(nestedSelectors) {
