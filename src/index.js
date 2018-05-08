@@ -1,6 +1,13 @@
 'use strict';
 
 class CSSMe {
+  load(rules = {}) {
+    const style = document.createElement('style');
+    style.type = 'text/css';
+    style.innerHTML = this.stringify(rules);
+    document.getElementsByTagName('head')[0].appendChild(style);
+  }
+
   stringify(rules = {}) {
     const output = [];
     const stack = this.getEmptyStack(rules);
