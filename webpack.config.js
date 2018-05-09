@@ -24,7 +24,7 @@ module.exports = {
   entry: [__dirname + '/src/index.js'],
   devServer: {
     host: '0.0.0.0',
-    port: 8383,
+    port: 9000,
     inline: true,
     hot: true
   },
