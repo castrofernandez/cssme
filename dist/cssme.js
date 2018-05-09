@@ -72,7 +72,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	}
 /******/
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "fe05c4f60313e1ca87d8"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "c55b903f9f6a2396aa4d"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -788,6 +788,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 class CSSMe {
   load(rules = {}) {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     const style = document.createElement('style');
     style.type = 'text/css';
     style.innerHTML = this.stringify(rules);

@@ -2,6 +2,10 @@
 
 class CSSMe {
   load(rules = {}) {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     const style = document.createElement('style');
     style.type = 'text/css';
     style.innerHTML = this.stringify(rules);
