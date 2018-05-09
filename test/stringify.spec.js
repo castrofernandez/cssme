@@ -80,4 +80,32 @@ describe('cssme: tests', function () {
     });
     expect(result).to.equal('body div{color:red;background-color:black;}body div p{font-style:italic;}');
   });
+
+  it('&', async function () {
+    const result = cssme.stringify({
+      'body': {
+        'div': {
+          color: 'red',
+          '&:hover, &:first-child': {
+            'font-style': 'italic'
+          }
+        }
+      }
+    });
+    expect(result).to.equal('body div{color:red;}body div:hover{font-style:italic;}body div:first-child{font-style:italic;}');
+  });
+
+  it('comma separated', async function () {
+    const result = cssme.stringify({
+      'body': {
+        'div, p': {
+          color: 'red',
+          '&:hover, &:first-child': {
+            'font-style': 'italic'
+          }
+        }
+      }
+    });
+    expect(result).to.equal('body div{color:red;}body p{color:red;}body div:hover{font-style:italic;}body div:first-child{font-style:italic;}body p:hover{font-style:italic;}body p:first-child{font-style:italic;}');
+  });
 });

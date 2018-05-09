@@ -21,9 +21,11 @@ class CSSMe {
         value = current.rules[rule];
 
         if (this.isObject(value)) {
-          stack.push({
-            rules: value,
-            nestedSelectors: current.nestedSelectors.concat(rule)
+          rule.split(',').forEach(segment => {
+            stack.push({
+              rules: value,
+              nestedSelectors: this.replaceAmpersand(segment.trim(), current.nestedSelectors)
+            });
           });
         } else {
           selector = this.getSelector(current.nestedSelectors);
@@ -37,6 +39,17 @@ class CSSMe {
     }
 
     return this.formatOutput(output);
+  }
+
+  replaceAmpersand(rule, nestedSelectors) {
+    if (!rule.includes('&') || nestedSelectors.length === 0) {
+      return nestedSelectors.concat(rule);
+    }
+
+    const last = nestedSelectors[nestedSelectors.length - 1];
+    const selector = rule.replace(/&/g, last);
+
+    return nestedSelectors.slice(0, -1).concat(selector);
   }
 
   getEmptyStack(rules) {
