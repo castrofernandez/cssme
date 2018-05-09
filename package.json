@@ -1,6 +1,6 @@
 {
   "name": "cssme",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Dynamic CSS",
   "main": "dist/cssme.js",
   "scripts": {
